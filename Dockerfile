@@ -70,7 +70,9 @@ COPY --from=gitgau-build /dist /usr
 COPY --from=certhub-build /dist /usr
 COPY --from=certbot-build /dist /usr
 
-RUN addgroup -S certhub && adduser -S certhub -G certhub
+RUN addgroup -S certhub && adduser -S certhub -G certhub && \
+    mkdir -p /etc/letsencrypt /var/log/letsencrypt /var/lib/letsencrypt && \
+    chown certhub.certhub /etc/letsencrypt /var/log/letsencrypt /var/lib/letsencrypt
 
 USER certhub
 
