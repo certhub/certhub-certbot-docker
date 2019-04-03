@@ -31,7 +31,7 @@ RUN mkdir /src /dist
 ARG certhub_ref=master
 ENV certhub_ref ${certhub_ref}
 
-ADD "https://codeload.github.com/znerol/certhub/tar.gz/${certhub_ref}" /src/certhub-src.tar.gz
+ADD "https://codeload.github.com/certhub/certhub/tar.gz/${certhub_ref}" /src/certhub-src.tar.gz
 RUN tar -o -C /src -xf /src/certhub-src.tar.gz
 RUN make -C /src/certhub-* prefix=/dist install-bin
 
