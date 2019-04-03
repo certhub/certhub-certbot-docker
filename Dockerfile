@@ -64,7 +64,7 @@ RUN pip3 install --install-option="--prefix=/dist" /src/certbot-*/acme/ /src/cer
 #
 FROM base
 
-RUN apk add --no-cache ca-certificates git openssh-client openssl tini
+RUN apk add --no-cache ca-certificates git openssh-client openssl python3 tini
 
 COPY --from=gitgau-build /dist /usr
 COPY --from=certhub-build /dist /usr
