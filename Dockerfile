@@ -1,4 +1,4 @@
-ARG alpine_version=edge
+ARG alpine_version=3.9.2
 
 FROM alpine:${alpine_version} as base
 RUN apk update && apk upgrade
@@ -12,7 +12,7 @@ RUN apk add --no-cache make
 
 RUN mkdir /src /dist
 
-ARG gitgau_ref=master
+ARG gitgau_ref=v1.1.0
 ENV gitgau_ref ${gitgau_ref}
 
 ADD "https://codeload.github.com/znerol/git-gau/tar.gz/${gitgau_ref}" /src/git-gau-src.tar.gz
@@ -28,7 +28,7 @@ RUN apk add --no-cache make
 
 RUN mkdir /src /dist
 
-ARG certhub_ref=master
+ARG certhub_ref=v1.0.0-beta5
 ENV certhub_ref ${certhub_ref}
 
 ADD "https://codeload.github.com/certhub/certhub/tar.gz/${certhub_ref}" /src/certhub-src.tar.gz
@@ -44,13 +44,13 @@ RUN apk add --no-cache alpine-sdk python3-dev libffi-dev openssl-dev
 
 RUN mkdir /src /dist
 
-ARG certbot_ref=master
+ARG certbot_ref=v0.33.1
 ENV certbot_ref ${certbot_ref}
 
 ADD "https://codeload.github.com/certbot/certbot/tar.gz/${certbot_ref}" /src/certbot-src.tar.gz
 RUN tar -o -C /src -xf /src/certbot-src.tar.gz
 
-ARG lexicon_ref=master
+ARG lexicon_ref=v3.2.1
 ENV lexicon_ref ${lexicon_ref}
 
 ADD "https://codeload.github.com/AnalogJ/lexicon/tar.gz/${lexicon_ref}" /src/lexicon-src.tar.gz
