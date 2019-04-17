@@ -4,35 +4,45 @@ servics: docker
 env:
   global:
     - IMAGE_NAME: certhub/certhub
+    - IMAGE_VARIANT: certbot
     - DOCKER_USERNAME: certhubci
     - secure: "P5QKiF0f7djJQZHS4iDnfbv1Rub4GILlg3WtfF+379kqXVU//AOKFw6dZpSnnigdgxiOm49J0nZIhPHdVEE7NIL+InRodFPim01WadoZhsMX1ZZ2Q/C87oxl/iW/tN7ryagZQb8JzM6AeRytS6EMaaFtMVuro76tpCD2fRofLBPE4XGxdNObyRJ7L+arJ0/PAL2TPzoXBRRuDiWM2RM3STqxaPwx7Eaqak3SmghNZF97xwPs/cODdjc4gZSETIXRFLkKvVQehT84N5M7lwJq4MuJN/5mDT1TnoA2oWXSzf5sGVDPqG4LI0+Qc6xWBoM/qYce4hslRnQsDrNN1UBNRlcOOjwF56/rT7pMbPoB4hYPMf/RKjmlOc8dMQl3lSxzfUvYn6FoNVsuI8Nr1JmMfiODZzy0SR+jAg13UXuwvmBoGtP0PiwPtP7qyjBK2X4sEY/p1qhPXYe79YEkdeSN2H9pS3LOb7Eaczcor3v5C19Ze5cRg49C84CAqMnq0lAcL6+Qwq7c76eMKXmG3sJBx5srOsffHKHlHHiE0CBg2yykhf8QGx+DAzQPVmqAb3i3MEviFzEGt2O9ygW5tfYcOgDRiWPcEXzCKqV2O3To5sTDKgYZVjEIDlVL4kmSItVAdPcIJsqBb52KsKFIy0QNOiUCnwntapwHQJhrdHUMUBM="
 
 stages:
-  - name: Deploy rolling
+  - name: Build
+  - name: Tag rolling
     if: branch = master
-  - name: Deploy release
+  - name: Tag release
     if: tag IS present
 
 before_script:
   - docker --version
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
 jobs:
   include:
-    - stage: Deploy rolling
+    - stage: Build
       script:
-        - docker pull "$IMAGE_NAME:rolling-certbot" || true
-        - docker build --cache-from "$IMAGE_NAME:rolling-certbot" --tag "$IMAGE_NAME:rolling-certbot" .
-        - docker push "$IMAGE_NAME:rolling-certbot"
+        - docker build --tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" .
+        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
 
-    - stage: Deploy release
+    - stage: Tag rolling
       script:
-        - export VERSION_PATCH="certbot-${TRAVIS_TAG#v}"
+        - docker pull "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
+        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
+
+    - stage: Tag release
+      script:
+        - export VERSION_PATCH="${TRAVIS_TAG#v}"
         - export VERSION_MINOR="${VERSION_PATCH%.*}"
         - export VERSION_MAJOR="${VERSION_MINOR%.*}"
-        - export VERSION_FLAVOR="${VERSION_MAJOR%-*}"
-        - docker build --tag "$IMAGE_NAME:$VERSION_PATCH" --tag "$IMAGE_NAME:$VERSION_MINOR" --tag "$IMAGE_NAME:$VERSION_MAJOR" --tag "$IMAGE_NAME:$VERSION_FLAVOR" .
-        - docker push "$IMAGE_NAME:$VERSION_PATCH"
-        - docker push "$IMAGE_NAME:$VERSION_MINOR"
-        - docker push "$IMAGE_NAME:$VERSION_MAJOR"
-        - docker push "$IMAGE_NAME:$VERSION_FLAVOR"
+        - docker pull "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}"
+        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
+        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
+        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
+        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}"
