@@ -26,8 +26,8 @@ Official Certhub/Certbot Docker Image
 Manifest
 --------
 
-* alpine: edge
-* certbot: master
-* certhub: master
-* dns-lexicon: master
-* git-gau: master
+* alpine: 3.9.3
+* certbot: v0.33.1
+* certhub: v1.0.0-beta6
+* dns-lexicon: v3.2.3
+* git-gau: v1.1.0
