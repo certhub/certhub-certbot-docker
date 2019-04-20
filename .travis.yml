@@ -30,8 +30,8 @@ jobs:
   include:
     - stage: Build
       script:
-        - docker build --tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" .
-        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
+        - docker build --tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" .
+        - docker push "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
 
     - stage: Integration test
       env:
@@ -47,8 +47,8 @@ jobs:
 
     - stage: Tag rolling
       script:
-        - docker pull "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
+        - docker pull "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
 
     - stage: Tag release
@@ -56,11 +56,11 @@ jobs:
         - export VERSION_PATCH="${TRAVIS_TAG#v}"
         - export VERSION_MINOR="${VERSION_PATCH%.*}"
         - export VERSION_MAJOR="${VERSION_MINOR%.*}"
-        - docker pull "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}"
+        - docker pull "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
