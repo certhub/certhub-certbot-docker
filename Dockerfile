@@ -59,6 +59,29 @@ RUN tar -o -C /src -xf /src/lexicon-src.tar.gz
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 RUN pip3 install --install-option="--prefix=/dist" /src/certbot-*/acme/ /src/certbot-*/ /src/lexicon-*/
 
+
+#
+# docs stage
+#
+FROM base as docs-build
+
+RUN mkdir /dist /dist-etc
+
+ARG build_log_url
+ENV build_log_url ${build_log_url}
+
+ARG build_log_label
+ENV build_log_label ${build_log_label}
+
+COPY . /src
+
+RUN if [ -n "${build_log_url}" ] && [ -n "${build_log_label}" ]; then \
+    sed -i "s|.*Build Status.*$|Build Log: [${build_log_label}](${build_log_url})|g" /src/README.md; \
+    fi
+RUN install -m 0644 -D /src/README.md /dist-etc/motd && \
+    install -m 0755 -D /src/docker-entry.d/00-motd /dist/lib/git-gau/docker-entry.d/00-motd
+
+
 #
 # runtime image stage
 #
@@ -69,6 +92,9 @@ RUN apk add --no-cache ca-certificates curl git openssh-client openssl python3 t
 COPY --from=gitgau-build /dist /usr
 COPY --from=certhub-build /dist /usr
 COPY --from=certbot-build /dist /usr
+COPY --from=docs-build /dist /usr
+COPY --from=docs-build /dist-etc /etc
+
 
 RUN addgroup -S certhub && adduser -S certhub -G certhub && \
     mkdir -p /etc/letsencrypt /var/log/letsencrypt /var/lib/letsencrypt && \

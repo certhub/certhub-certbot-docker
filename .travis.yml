@@ -34,7 +34,12 @@ jobs:
   include:
     - stage: Build
       script:
-        - docker build --tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" .
+        - >
+            docker build
+            --tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
+            --build-arg build_log_label="Travis CI Build #${TRAVIS_BUILD_NUMBER}"
+            --build-arg build_log_url="${TRAVIS_BUILD_WEB_URL}"
+            .
         - docker push "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
 
     - stage: Integration test
