@@ -13,13 +13,17 @@ env:
     - secure: "XlHLGINEH7gwhYoC4ATZR6dhLgJKbB5l5P1Z3/ABhZKVtyLHMiKgAmRhpv0czXVa31bff/TRfTdm3HYQoIrvRpVba5ONYEQj0i/oZmo+YlwnV/iVqHk9AQaaHZrXclU848KYsj+yQffHxT7h7xHKFa7IgCvLq62GOjUil9NPAR1LhjyVZPeanhjKgpuBYaYamy6B1BO7OkVOWf2UCQR+OHVF3VN1tUm3N3cOtuUTP21UXooUHGWGUsm4lAhOceC284CjRrD0lxLze5N/wyBIh/bFkKD9HNPt5Dvd4Irtjc15QiTwOklIRzyHBtOrU43YlOJmuXLCV7wAupA/M8Q1mMgqqMCTW2bBDOxdbNz9Sxve7TUnhQHX6aLGlu5kiE23cbELVBOB//Dw66drVkukKL1Nz8gcBKSxF123jgeWyADlw2j6iwIkL48vju7JUVqOi9t3hISulS0WsEjoXj3qHZJiQ/E9nRU6fVOW00l+LNonzwLuA0yplXfwjpdqjG5A1oqcP4gkRhTjYue89niS6igvCD89Pb6Rnp+3b7je2Whkr9cvzc28FbURMU1IzJja8tzjKYuWTqIaYlSLT8xoIjiDYkq0nsVYNRemgtQqbiFqTkapnPzU4T0B9A9p2X9EcWNpyhAVKIGpwuIQiu3GXOQxSbcjdjYy/Ej4xhO6NS8="
     # travis encrypt PRIVATE_DIGITALOCEAN_TOKEN=abcdefg[...]
     - secure: "s4gs9iBKdnznxNq4t7q23VEpPQrDdDFFeUiPV0ivWvNzA0x0TWsyBlp2zWia4LwQKsBeIAx2FYiqvbDzOBMEx4fgUBCixxCxS/Iyt85TdqyznRxBMAO1vkRW1fqZ6HWbWQooSpJXPZe5lHNwJw8vFes162a3qiseK/5X2DJTSCCNnN1VFDx9EdJcx9ZFfj+lg2ycmZIqwWfXt2o5htoSav+7C3j9tLIJkmNtFjPvebiIxZV1RvpMjuPx9Hu3lLdwwtHdoXqI05RegARg5yE02nm0KSQ5oB4aC4RlK6Sf+rv2R332VoMwydyhxjVj4d/3gkoaLk/85U/pYbc4bRf820ntR4Bv0KlxUFzSSy73hIdpomCAW4Xuzx5TAYnkF26FyEhHVvnGAIMbsB1UgmXKsfKTB5gVozCQVYCGhD/ontV2cGwrfu2z4KzxvYp2i0Hqvn1OPiMebwEhJYVhx7HlRKQ2oZY+zWL/KuQ3gv9D2lVf8CEARyDI1YRlOsS5xYKklOS1RPbz2gsGuegEvQN5L645ApSC6cccTAW4LnIFNSJIQ772INvwf3gNVtoKrff081BDBXaaeF04fqlG7eh3ateUgzqIA9V3HlLTDkXBpurnTBSGv1zjN0i6en2ZaFUS2/L9WMKZwoiBxqkzfwjc5Jw7mkywkDsrfRjgMThvKhw="
+    # travis encrypt GH_TOKEN=abcdefg[...]
+    - secure: "VLwNBnglmPxrPhnEXqU3zBMWjjeyvgJNH1RuMp3YV2HD2hamr2dfAZ3EFI9G4vUNkH9+T+yVg6dBnuPykXWizE0U7I9wCdd7p26gL2qS8Ii4px4uKDIYrS1iCS9jXekWCr3srUdUfYQbXEtcgjZ2cNETd6x5wsL5PAnFDrLD3nA/+tzIL3xCZPbgG8yoyoTUY5xH9si600TD+mkMFd7iDwc2bXKvIsK6wz9o4Z/uPWUrF8KcGkw3ODDADX8G1BqEvvz8fLCMntFokvBCCuSYLWFb2eZWpG2r6aRyaf1GkWAKIPNJHNlA+iVOCfpG0J1YBCpK3T+q9MgGAAhCXu4Q/9/saqOQV0dKzlBxDErCC4xt1nAskxM7LMIA/LL549Q76qkFYySigSJbfwoX8mcMLfDAqT7AMnszlcqLhUXHzxLcc3Ih4/O5Yll/4CZmaBgogNAZecNO/92hyOjRsB+7G45VQ7XnXnNwXdLodwAYt8GmaXOiYCL1NkJNHZ+uQF83yZE2dW4vCzxxunGPI8T3gl3s4t/GeZQOLk4Wp6v2qF4GSxJbkpq/Fslp5dVXtof9QwaxHIO1OZI0ONZfVSUnhDE0MWOuS3jLdRKCyolsL/9deyIqL32Zv9CMGlRV7dYe7NJxfUt/Q8GXiR9/OpWa8LW6qXI9HTce7SaHFTm7svI="
 
 stages:
   - name: Build
   - name: Integration test
-  - name: Tag rolling
-    if: branch = master
-  - name: Tag release
+  - name: Dockerhub rolling
+    if: branch = master AND type = push
+  - name: Github release
+    if: branch = latest AND type = push
+  - name: Dockerhub release
     if: tag IS present
 
 before_script:
@@ -30,8 +34,8 @@ jobs:
   include:
     - stage: Build
       script:
-        - docker build --tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" .
-        - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
+        - docker build --tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" .
+        - docker push "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
 
     - stage: Integration test
       env:
@@ -45,22 +49,27 @@ jobs:
         - docker-compose ${DOCKER_COMPOSE_ARGS} build
         - docker-compose ${DOCKER_COMPOSE_ARGS} run sut
 
-    - stage: Tag rolling
+    - stage: Dockerhub rolling
       script:
-        - docker pull "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
+        - docker pull "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-rolling"
 
-    - stage: Tag release
+    - stage: Github release
+      script:
+        - nvm install lts/*
+        - npx semantic-release
+
+    - stage: Dockerhub release
       script:
         - export VERSION_PATCH="${TRAVIS_TAG#v}"
         - export VERSION_MINOR="${VERSION_PATCH%.*}"
         - export VERSION_MAJOR="${VERSION_MINOR%.*}"
-        - docker pull "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
-        - docker tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}"
+        - docker pull "${IMAGE_NAME}:${IMAGE_BUILD_ID}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
+        - docker tag "${IMAGE_NAME}:${IMAGE_BUILD_ID}" "${IMAGE_NAME}:${IMAGE_VARIANT}"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_PATCH}"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MINOR}"
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-${VERSION_MAJOR}"
