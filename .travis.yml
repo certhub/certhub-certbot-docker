@@ -6,10 +6,16 @@ env:
     - IMAGE_NAME: certhub/certhub
     - IMAGE_VARIANT: certbot
     - DOCKER_USERNAME: certhubci
+    # travis encrypt DOCKER_PASSWORD=abcdefg[...]
     - secure: "P5QKiF0f7djJQZHS4iDnfbv1Rub4GILlg3WtfF+379kqXVU//AOKFw6dZpSnnigdgxiOm49J0nZIhPHdVEE7NIL+InRodFPim01WadoZhsMX1ZZ2Q/C87oxl/iW/tN7ryagZQb8JzM6AeRytS6EMaaFtMVuro76tpCD2fRofLBPE4XGxdNObyRJ7L+arJ0/PAL2TPzoXBRRuDiWM2RM3STqxaPwx7Eaqak3SmghNZF97xwPs/cODdjc4gZSETIXRFLkKvVQehT84N5M7lwJq4MuJN/5mDT1TnoA2oWXSzf5sGVDPqG4LI0+Qc6xWBoM/qYce4hslRnQsDrNN1UBNRlcOOjwF56/rT7pMbPoB4hYPMf/RKjmlOc8dMQl3lSxzfUvYn6FoNVsuI8Nr1JmMfiODZzy0SR+jAg13UXuwvmBoGtP0PiwPtP7qyjBK2X4sEY/p1qhPXYe79YEkdeSN2H9pS3LOb7Eaczcor3v5C19Ze5cRg49C84CAqMnq0lAcL6+Qwq7c76eMKXmG3sJBx5srOsffHKHlHHiE0CBg2yykhf8QGx+DAzQPVmqAb3i3MEviFzEGt2O9ygW5tfYcOgDRiWPcEXzCKqV2O3To5sTDKgYZVjEIDlVL4kmSItVAdPcIJsqBb52KsKFIy0QNOiUCnwntapwHQJhrdHUMUBM="
+    # travis encrypt PRIVATE_SSH_KEY=$(printf %q "$(</path/to/ssh/private.key)")
+    - secure: "XlHLGINEH7gwhYoC4ATZR6dhLgJKbB5l5P1Z3/ABhZKVtyLHMiKgAmRhpv0czXVa31bff/TRfTdm3HYQoIrvRpVba5ONYEQj0i/oZmo+YlwnV/iVqHk9AQaaHZrXclU848KYsj+yQffHxT7h7xHKFa7IgCvLq62GOjUil9NPAR1LhjyVZPeanhjKgpuBYaYamy6B1BO7OkVOWf2UCQR+OHVF3VN1tUm3N3cOtuUTP21UXooUHGWGUsm4lAhOceC284CjRrD0lxLze5N/wyBIh/bFkKD9HNPt5Dvd4Irtjc15QiTwOklIRzyHBtOrU43YlOJmuXLCV7wAupA/M8Q1mMgqqMCTW2bBDOxdbNz9Sxve7TUnhQHX6aLGlu5kiE23cbELVBOB//Dw66drVkukKL1Nz8gcBKSxF123jgeWyADlw2j6iwIkL48vju7JUVqOi9t3hISulS0WsEjoXj3qHZJiQ/E9nRU6fVOW00l+LNonzwLuA0yplXfwjpdqjG5A1oqcP4gkRhTjYue89niS6igvCD89Pb6Rnp+3b7je2Whkr9cvzc28FbURMU1IzJja8tzjKYuWTqIaYlSLT8xoIjiDYkq0nsVYNRemgtQqbiFqTkapnPzU4T0B9A9p2X9EcWNpyhAVKIGpwuIQiu3GXOQxSbcjdjYy/Ej4xhO6NS8="
+    # travis encrypt PRIVATE_DIGITALOCEAN_TOKEN=abcdefg[...]
+    - secure: "s4gs9iBKdnznxNq4t7q23VEpPQrDdDFFeUiPV0ivWvNzA0x0TWsyBlp2zWia4LwQKsBeIAx2FYiqvbDzOBMEx4fgUBCixxCxS/Iyt85TdqyznRxBMAO1vkRW1fqZ6HWbWQooSpJXPZe5lHNwJw8vFes162a3qiseK/5X2DJTSCCNnN1VFDx9EdJcx9ZFfj+lg2ycmZIqwWfXt2o5htoSav+7C3j9tLIJkmNtFjPvebiIxZV1RvpMjuPx9Hu3lLdwwtHdoXqI05RegARg5yE02nm0KSQ5oB4aC4RlK6Sf+rv2R332VoMwydyhxjVj4d/3gkoaLk/85U/pYbc4bRf820ntR4Bv0KlxUFzSSy73hIdpomCAW4Xuzx5TAYnkF26FyEhHVvnGAIMbsB1UgmXKsfKTB5gVozCQVYCGhD/ontV2cGwrfu2z4KzxvYp2i0Hqvn1OPiMebwEhJYVhx7HlRKQ2oZY+zWL/KuQ3gv9D2lVf8CEARyDI1YRlOsS5xYKklOS1RPbz2gsGuegEvQN5L645ApSC6cccTAW4LnIFNSJIQ772INvwf3gNVtoKrff081BDBXaaeF04fqlG7eh3ateUgzqIA9V3HlLTDkXBpurnTBSGv1zjN0i6en2ZaFUS2/L9WMKZwoiBxqkzfwjc5Jw7mkywkDsrfRjgMThvKhw="
 
 stages:
   - name: Build
+  - name: Integration test
   - name: Tag rolling
     if: branch = master
   - name: Tag release
@@ -25,6 +31,18 @@ jobs:
       script:
         - docker build --tag "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}" .
         - docker push "${IMAGE_NAME}:${IMAGE_VARIANT}-travis-build-${TRAVIS_BUILD_ID}"
+
+    - stage: Integration test
+      env:
+        - DOCKER_COMPOSE_ARGS: >
+            "
+            -f integration-test/docker-compose.yml
+            -f integration-test/docker-compose.travis.yml
+            -f integration-test/docker-compose.test-${IMAGE_VARIANT}.travis.yml
+            "
+      script:
+        - docker-compose ${DOCKER_COMPOSE_ARGS} build
+        - docker-compose ${DOCKER_COMPOSE_ARGS} run sut
 
     - stage: Tag rolling
       script:
