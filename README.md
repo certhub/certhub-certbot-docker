@@ -29,5 +29,5 @@ Manifest
 * alpine: 3.9.4
 * certbot: v0.34.2
 * certhub: v1.0.0-beta6
-* dns-lexicon: v3.2.5
+* dns-lexicon: v3.2.6
 * git-gau: v1.1.0
