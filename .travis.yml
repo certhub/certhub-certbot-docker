@@ -20,7 +20,7 @@ stages:
   - name: Build
   - name: Integration test
   - name: Dockerhub rolling
-    if: branch = master AND type = push
+    if: branch = master AND type IN (push, cron)
   - name: Github release
     if: branch = latest AND type = push
   - name: Dockerhub release
