@@ -4,13 +4,17 @@ services:
     sut:
         command: /test/test-certbot.sh
         environment:
-          - "CERTHUB_CERTBOT_CONFIG=certbot.ini"
-          - "CERTHUB_CERTBOT_ARGS="
-          - "CERTHUB_LEXICON_GLOBAL_ARGS=--delegated ci.certhub.io"
-          - "CERTHUB_LEXICON_PROVIDER=digitalocean"
-          - "LEXICON_DIGITALOCEAN_TOKEN=${PRIVATE_DIGITALOCEAN_TOKEN}"
+          CERTHUB_CERTBOT_CONFIG: >-
+            certbot.ini
+          CERTHUB_CERTBOT_ARGS: ""
+          CERTHUB_LEXICON_GLOBAL_ARGS: >-
+            --delegated ci.certhub.io
+          CERTHUB_LEXICON_PROVIDER: >-
+            digitalocean
+          LEXICON_DIGITALOCEAN_TOKEN: >-
+            ${PRIVATE_DIGITALOCEAN_TOKEN}
 
     config:
         command: /test/config-setup-certbot.sh
         environment:
-          - "CONFIG_CERTBOT_INI_PATH=certbot.ini"
+          CONFIG_CERTBOT_INI_PATH: certbot.ini
