@@ -4,13 +4,35 @@ services:
     sut:
         command: /test/test-certbot.sh
         environment:
-          - "CERTHUB_CERTBOT_CONFIG=certbot.ini"
-          - "CERTHUB_CERTBOT_ARGS="
-          - "CERTHUB_LEXICON_GLOBAL_ARGS=--delegated ci.certhub.io"
-          - "CERTHUB_LEXICON_PROVIDER=digitalocean"
-          - "LEXICON_DIGITALOCEAN_TOKEN=${PRIVATE_DIGITALOCEAN_TOKEN}"
+          CERTHUB_CERTBOT_CONFIG: >-
+            certbot.ini
+          CERTHUB_CERTBOT_ARGS: ""
+          CERTHUB_LEXICON_GLOBAL_ARGS: >-
+            --delegated ci.certhub.io
+          CERTHUB_LEXICON_PROVIDER: >-
+            digitalocean
+          LEXICON_DIGITALOCEAN_TOKEN: >-
+            ${PRIVATE_DIGITALOCEAN_TOKEN}
+          # Account setup via certhub-docker-entry script
+          # https://certhub.readthedocs.io/en/latest/certhub-docker-entry.8.html#environment-certbot
+          CERTHUB_CERTBOT_ACCOUNT_KEY: >-
+            ${PRIVATE_CERTBOT_ACCOUNT_KEY}
+          CERTHUB_CERTBOT_ACCOUNT_REGR: >-
+            {
+               "body" : {},
+               "uri" : "https://acme-staging-v02.api.letsencrypt.org/acme/acct/10025494"
+            }
+          CERTHUB_CERTBOT_ACCOUNT_META: >-
+            {
+               "creation_host" : "cbbfd62ccced",
+               "creation_dt" : "2019-07-13T14:06:38Z"
+            }
+          CERTHUB_CERTBOT_ACCOUNT_ID: >-
+            9b2f4f018a40166c43d9d77ebd490bd8
+          CERTHUB_CERTBOT_ACCOUNT_SERVER: >-
+            https://acme-staging-v02.api.letsencrypt.org/directory
 
     config:
         command: /test/config-setup-certbot.sh
         environment:
-          - "CONFIG_CERTBOT_INI_PATH=certbot.ini"
+          CONFIG_CERTBOT_INI_PATH: certbot.ini
