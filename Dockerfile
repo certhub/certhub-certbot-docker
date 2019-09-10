@@ -44,7 +44,7 @@ RUN apk add --no-cache alpine-sdk python3-dev libffi-dev openssl-dev
 
 RUN mkdir /src /dist
 
-ARG certbot_ref=v0.37.1
+ARG certbot_ref=v0.37.2
 ENV certbot_ref ${certbot_ref}
 
 ADD "https://codeload.github.com/certbot/certbot/tar.gz/${certbot_ref}" /src/certbot-src.tar.gz
