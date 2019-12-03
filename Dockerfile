@@ -57,7 +57,7 @@ ADD "https://codeload.github.com/AnalogJ/lexicon/tar.gz/${lexicon_ref}" /src/lex
 RUN tar -o -C /src -xf /src/lexicon-src.tar.gz
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-RUN pip3 install --install-option="--prefix=/dist" /src/certbot-*/acme/ /src/certbot-*/ /src/lexicon-*/
+RUN pip3 install --install-option="--prefix=/dist" /src/certbot-*/acme/ /src/certbot-*/certbot/ /src/lexicon-*/
 
 
 #
