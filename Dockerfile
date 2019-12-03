@@ -28,7 +28,7 @@ RUN apk add --no-cache make
 
 RUN mkdir /src /dist
 
-ARG certhub_ref=v1.0.0-beta9
+ARG certhub_ref=v1.0.0
 ENV certhub_ref ${certhub_ref}
 
 ADD "https://codeload.github.com/certhub/certhub/tar.gz/${certhub_ref}" /src/certhub-src.tar.gz
@@ -44,7 +44,7 @@ RUN apk add --no-cache alpine-sdk python3-dev libffi-dev openssl-dev
 
 RUN mkdir /src /dist
 
-ARG certbot_ref=v0.40.1
+ARG certbot_ref=v1.0.0
 ENV certbot_ref ${certbot_ref}
 
 ADD "https://codeload.github.com/certbot/certbot/tar.gz/${certbot_ref}" /src/certbot-src.tar.gz
