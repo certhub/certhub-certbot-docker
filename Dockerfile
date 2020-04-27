@@ -40,7 +40,7 @@ RUN make -C /src/certhub-* prefix=/dist install-bin
 #
 FROM base as certbot-build
 
-RUN apk add --no-cache alpine-sdk python3-dev libffi-dev openssl-dev
+RUN apk add --no-cache alpine-sdk python3-dev py3-pip libffi-dev openssl-dev
 
 RUN mkdir /src /dist
 
@@ -57,7 +57,7 @@ ADD "https://codeload.github.com/AnalogJ/lexicon/tar.gz/${lexicon_ref}" /src/lex
 RUN tar -o -C /src -xf /src/lexicon-src.tar.gz
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-RUN pip3 install --install-option="--prefix=/dist" /src/certbot-*/acme/ /src/certbot-*/certbot/ /src/lexicon-*/
+RUN pip3 install --prefix=/dist /src/certbot-*/acme/ /src/certbot-*/certbot/ /src/lexicon-*/
 
 
 #
@@ -87,7 +87,7 @@ RUN install -m 0644 -D /src/README.md /dist-etc/motd && \
 #
 FROM base
 
-RUN apk add --no-cache ca-certificates curl git openssh-client openssl python3 tini tzdata
+RUN apk add --no-cache ca-certificates curl git openssh-client openssl python3 py3-pip tini tzdata
 
 COPY --from=gitgau-build /dist /usr
 COPY --from=certhub-build /dist /usr
