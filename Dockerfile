@@ -44,7 +44,7 @@ RUN apk add --no-cache python3 py3-cffi py3-cryptography py3-openssl py3-pip py3
 
 RUN mkdir /src /dist
 
-ARG certbot_ref=v1.3.0
+ARG certbot_ref=v1.4.0
 ENV certbot_ref ${certbot_ref}
 
 ADD "https://codeload.github.com/certbot/certbot/tar.gz/${certbot_ref}" /src/certbot-src.tar.gz
