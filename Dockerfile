@@ -57,9 +57,10 @@ ADD "https://codeload.github.com/AnalogJ/lexicon/tar.gz/${lexicon_ref}" /src/lex
 RUN tar -o -C /src -xf /src/lexicon-src.tar.gz
 
 RUN curl -fsSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+RUN (cd /src/lexicon-* && ~/.poetry/bin/poetry build)
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-RUN pip3 install --prefix=/dist /src/certbot-*/acme/ /src/certbot-*/certbot/ /src/lexicon-*/
+RUN pip3 install --prefix=/dist /src/certbot-*/acme/ /src/certbot-*/certbot/ /src/lexicon-*/dist/dns_lexicon-*-py3-none-any.whl
 
 
 #
