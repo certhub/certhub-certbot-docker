@@ -26,7 +26,7 @@ Official Certhub/Certbot Docker Image
 Manifest
 --------
 
-* alpine: 3.13.0
+* alpine: 3.13.1
 * certbot: v1.11.0
 * certhub: v1.0.0
 * dns-lexicon: v3.5.3
