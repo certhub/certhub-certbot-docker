@@ -1,7 +1,7 @@
 Official Certhub/Certbot Docker Image
 =====================================
 
-[![Build Status](https://travis-ci.org/certhub/certhub-certbot-docker.svg?branch=master)](https://travis-ci.org/certhub/certhub-certbot-docker)
+[![Build Status](https://travis-ci.org/certhub/certhub-certbot-docker.svg?branch=develop)](https://travis-ci.org/certhub/certhub-certbot-docker)
 
 
                             .oO'Oo.       .oO'Oo.
@@ -28,6 +28,6 @@ Manifest
 
 * alpine: edge
 * certbot: master
-* certhub: master
+* certhub: develop
 * dns-lexicon: master
-* git-gau: master
+* git-gau: develop

@@ -12,7 +12,7 @@ RUN apk add --no-cache make
 
 RUN mkdir /src /dist
 
-ARG gitgau_ref=master
+ARG gitgau_ref=develop
 ENV gitgau_ref ${gitgau_ref}
 
 ADD "https://codeload.github.com/znerol/git-gau/tar.gz/${gitgau_ref}" /src/git-gau-src.tar.gz
@@ -28,7 +28,7 @@ RUN apk add --no-cache make
 
 RUN mkdir /src /dist
 
-ARG certhub_ref=master
+ARG certhub_ref=develop
 ENV certhub_ref ${certhub_ref}
 
 ADD "https://codeload.github.com/certhub/certhub/tar.gz/${certhub_ref}" /src/certhub-src.tar.gz
