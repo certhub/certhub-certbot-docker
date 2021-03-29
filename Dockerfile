@@ -50,7 +50,7 @@ ENV certbot_ref ${certbot_ref}
 ADD "https://codeload.github.com/certbot/certbot/tar.gz/${certbot_ref}" /src/certbot-src.tar.gz
 RUN tar -o -C /src -xf /src/certbot-src.tar.gz
 
-ARG lexicon_ref=v3.5.5
+ARG lexicon_ref=v3.5.6
 ENV lexicon_ref ${lexicon_ref}
 
 ADD "https://codeload.github.com/AnalogJ/lexicon/tar.gz/${lexicon_ref}" /src/lexicon-src.tar.gz
