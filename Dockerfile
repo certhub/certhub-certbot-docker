@@ -1,4 +1,4 @@
-ARG alpine_version=3.13
+ARG alpine_version=edge
 
 FROM alpine:${alpine_version} as base
 RUN apk update && apk upgrade
