@@ -28,7 +28,7 @@ RUN apk add --no-cache make
 
 RUN mkdir /src /dist
 
-ARG certhub_ref=v1.0.0
+ARG certhub_ref=v1.1.0
 ENV certhub_ref ${certhub_ref}
 
 ADD "https://codeload.github.com/certhub/certhub/tar.gz/${certhub_ref}" /src/certhub-src.tar.gz
