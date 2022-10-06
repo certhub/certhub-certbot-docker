@@ -56,7 +56,7 @@ ENV lexicon_ref ${lexicon_ref}
 ADD "https://codeload.github.com/AnalogJ/lexicon/tar.gz/${lexicon_ref}" /src/lexicon-src.tar.gz
 RUN tar -o -C /src -xf /src/lexicon-src.tar.gz
 
-RUN curl -fsSL https://install.python-poetry.org | python3
+RUN curl -fsSL https://install.python-poetry.org | python3 -
 RUN (cd /src/lexicon-* && ~/.poetry/bin/poetry build)
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
