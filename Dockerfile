@@ -40,7 +40,7 @@ RUN make -C /src/certhub-* prefix=/dist install-bin
 #
 FROM base as certbot-build
 
-RUN apk add --no-cache ca-certificates curl python3 py3-cffi py3-cryptography py3-openssl py3-pip py3-yaml py3-lxml
+RUN apk add --no-cache ca-certificates poetry python3 py3-cffi py3-cryptography py3-openssl py3-pip py3-yaml py3-lxml
 
 RUN mkdir /src /dist
 
@@ -56,8 +56,7 @@ ENV lexicon_ref ${lexicon_ref}
 ADD "https://codeload.github.com/AnalogJ/lexicon/tar.gz/${lexicon_ref}" /src/lexicon-src.tar.gz
 RUN tar -o -C /src -xf /src/lexicon-src.tar.gz
 
-RUN curl -fsSL https://install.python-poetry.org | python3 -
-RUN (cd /src/lexicon-* && ~/.poetry/bin/poetry build)
+RUN (cd /src/lexicon-* && poetry build)
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 RUN pip3 install --prefix=/dist /src/certbot-*/acme/ /src/certbot-*/certbot/ /src/lexicon-*/dist/dns_lexicon-*-py3-none-any.whl
