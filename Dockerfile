@@ -40,7 +40,7 @@ RUN make -C /src/certhub-* prefix=/dist install-bin
 #
 FROM base as certbot-build
 
-RUN apk add --no-cache ca-certificates poetry python3 py3-cffi py3-cryptography py3-openssl py3-pip py3-requests py3-yaml py3-lxml
+RUN apk add --no-cache ca-certificates poetry python3 py3-cffi py3-cryptography py3-openssl py3-pip py3-requests py3-requests-file py3-requests-toolbelt py3-yaml py3-lxml
 
 RUN mkdir /src /dist
 
@@ -89,7 +89,7 @@ RUN install -m 0644 -D /src/README.md /dist-etc/motd && \
 #
 FROM base
 
-RUN apk add --no-cache ca-certificates curl git openssh-client openssl python3 py3-cffi py3-cryptography py3-openssl py3-pip py3-requests py3-requests-file p3-requests-toolbelt py3-yaml py3-lxml tini tzdata
+RUN apk add --no-cache ca-certificates curl git openssh-client openssl python3 py3-cffi py3-cryptography py3-openssl py3-pip py3-requests py3-requests-file py3-requests-toolbelt py3-yaml py3-lxml tini tzdata
 
 COPY --from=gitgau-build /dist /usr
 COPY --from=certhub-build /dist /usr
