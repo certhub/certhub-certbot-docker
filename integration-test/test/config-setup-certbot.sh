@@ -7,7 +7,7 @@ set -x
 CONFIG_CSR_DIR=$(dirname "${CONFIG_CSR_PATH}")
 mkdir -p "${CONFIG_CSR_DIR}"
 openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 | \
-    openssl req -new -subj "/CN=${CONFIG_CERT_CN}/" -key - -out "${CONFIG_CSR_PATH}"
+    openssl req -new -subj "/CN=${CONFIG_CERT_CN}/" -key /dev/stdin -out "${CONFIG_CSR_PATH}"
 
 CONFIG_CERTBOT_INI_DIR=$(dirname "${CONFIG_CERTBOT_INI_PATH}")
 mkdir -p "${CONFIG_CERTBOT_INI_DIR}"
