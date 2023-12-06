@@ -1,0 +1,16 @@
+---
+name: Integration Tests (Pull Request)
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+
+jobs:
+  build:
+    uses: ./.github/workflows/container-image.yml
+    secrets: inherit
+
+  run:
+    needs: build
+    uses: ./.github/workflows/integration-test.yml
+    secrets: inherit

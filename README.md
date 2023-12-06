@@ -1,7 +1,7 @@
 Official Certhub/Certbot Docker Image
 =====================================
 
-[![Build Status](https://travis-ci.org/certhub/certhub-certbot-docker.svg?branch=develop)](https://travis-ci.org/certhub/certhub-certbot-docker)
+[![Build Status](https://github.com/certhub/certhub-certbot-docker/actions/workflows/on-push-latest.yml/badge.svg?branch=latest)](https://github.com/certhub/certhub-certbot-docker/actions/workflows/on-push-latest.yml)
 
 
                             .oO'Oo.       .oO'Oo.
