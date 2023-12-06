@@ -20,15 +20,15 @@ services:
           CERTHUB_CERTBOT_ACCOUNT_REGR: >-
             {
               "body": {},
-              "uri": "https://acme-staging-v02.api.letsencrypt.org/acme/acct/128039944"
+              "uri": "https://acme-staging-v02.api.letsencrypt.org/acme/acct/128042814"
             }
           CERTHUB_CERTBOT_ACCOUNT_META: >-
             {
-              "creation_host": "localhost",
-              "creation_dt": "2023-12-06T20:22:03Z",
+              "creation_dt": "2023-12-06T20:48:18Z",
+              "creation_host": "localhost"
             }
           CERTHUB_CERTBOT_ACCOUNT_ID: >-
-            8cdbbac4147101a6288bfd86ae29c2da
+            32062752e4a4e45ef145c29ecfd067f4
           CERTHUB_CERTBOT_ACCOUNT_SERVER: >-
             https://acme-staging-v02.api.letsencrypt.org/directory
 
