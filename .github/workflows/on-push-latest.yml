@@ -1,0 +1,23 @@
+---
+name: Publish Latest Image (Push latest)
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - latest
+
+jobs:
+  build:
+    uses: ./.github/workflows/container-image.yml
+    secrets: inherit
+
+  run:
+    needs: build
+    uses: ./.github/workflows/integration-test.yml
+    secrets: inherit
+
+  release:
+    needs: run
+    uses: ./.github/workflows/github-release.yml
+    secrets: inherit
