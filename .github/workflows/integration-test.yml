@@ -1,0 +1,42 @@
+---
+name: Run integration test on container image
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    secrets:
+      PRIVATE_SSH_KEY:
+        required: true
+      PRIVATE_DIGITALOCEAN_TOKEN:
+        required: true
+      PRIVATE_CERTBOT_ACCOUNT_KEY:
+        required: true
+
+env:
+  IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+  IMAGE_VARIANT: ${{ vars.IMAGE_VARIANT }}
+  IMAGE_BUILD_ID: "${{ vars.IMAGE_VARIANT }}-gh-build-${{ github.run_id }}"
+  PRIVATE_SSH_KEY: "${{ secrets.PRIVATE_SSH_KEY }}"
+  PRIVATE_DIGITALOCEAN_TOKEN: "${{ secrets.PRIVATE_DIGITALOCEAN_TOKEN }}"
+  PRIVATE_CERTBOT_ACCOUNT_KEY: "${{ secrets.PRIVATE_CERTBOT_ACCOUNT_KEY }}"
+  DOCKER_COMPOSE_ARGS: >-
+    -f integration-test/docker-compose.yml
+    -f integration-test/docker-compose.github.yml
+    -f integration-test/docker-compose.test-${{ vars.IMAGE_VARIANT }}.github.yml
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up integration test
+        run: docker-compose ${{ env.DOCKER_COMPOSE_ARGS }} build
+
+      - name: Run integration test
+        run: docker-compose ${{ env.DOCKER_COMPOSE_ARGS }} run sut

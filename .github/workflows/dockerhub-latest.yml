@@ -1,0 +1,42 @@
+---
+name: Tag latest container image
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
+
+jobs:
+  latest-image:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract Version (Patch)
+        run: echo "VERSION_PATCH=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - name: Extract Version (Minor)
+        run: echo "VERSION_MINOR=${VERSION_PATCH%.*}" >> $GITHUB_ENV
+
+      - name: Extract Version (Major)
+        run: echo "VERSION_MAJOR=${VERSION_MINOR%.*}" >> $GITHUB_ENV
+
+      - name: Tag docker image
+        run: >-
+          docker buildx imagetools create ${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_VARIANT }}-gh-build-${{ github.run_id }}
+          --tag ${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_VARIANT }}-${{ env.VERSION_PATCH}}
+          --tag ${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_VARIANT }}-${{ env.VERSION_MINOR}}
+          --tag ${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_VARIANT }}-${{ env.VERSION_MAJOR}}
+          --tag ${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_VARIANT }}

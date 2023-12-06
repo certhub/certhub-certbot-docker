@@ -1,0 +1,22 @@
+---
+name: Publish Latest Image (Release Published)
+
+# yamllint disable-line rule:truthy
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    uses: ./.github/workflows/container-image.yml
+    secrets: inherit
+
+  run:
+    needs: build
+    uses: ./.github/workflows/integration-test.yml
+    secrets: inherit
+
+  tag:
+    needs: run
+    uses: ./.github/workflows/dockerhub-latest.yml
+    secrets: inherit

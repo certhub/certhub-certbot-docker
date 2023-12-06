@@ -1,0 +1,23 @@
+---
+name: Publish Rolling Image (Push develop)
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    uses: ./.github/workflows/container-image.yml
+    secrets: inherit
+
+  run:
+    needs: build
+    uses: ./.github/workflows/integration-test.yml
+    secrets: inherit
+
+  tag:
+    needs: run
+    uses: ./.github/workflows/dockerhub-rolling.yml
+    secrets: inherit
