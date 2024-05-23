@@ -30,4 +30,4 @@ Manifest
 * certbot: v2.10.0
 * certhub: v1.1.0
 * dns-lexicon: v3.17.0
-* git-gau: v1.1.0
+* git-gau: v1.3.0

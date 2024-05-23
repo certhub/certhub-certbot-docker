@@ -12,7 +12,7 @@ RUN apk add --no-cache make
 
 RUN mkdir /src /dist
 
-ARG gitgau_ref=v1.1.0
+ARG gitgau_ref=v1.3.0
 ENV gitgau_ref ${gitgau_ref}
 
 ADD "https://codeload.github.com/znerol/git-gau/tar.gz/${gitgau_ref}" /src/git-gau-src.tar.gz
