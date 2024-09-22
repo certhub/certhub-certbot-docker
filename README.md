@@ -28,6 +28,6 @@ Manifest
 
 * alpine: edge
 * certbot: master
-* certhub: develop
+* certhub: main
 * dns-lexicon: master
 * git-gau: develop
