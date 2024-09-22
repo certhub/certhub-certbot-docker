@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up integration test
-        run: docker-compose ${{ env.DOCKER_COMPOSE_ARGS }} build
+        run: docker compose ${{ env.DOCKER_COMPOSE_ARGS }} build
 
       - name: Run integration test
-        run: docker-compose ${{ env.DOCKER_COMPOSE_ARGS }} run sut
+        run: docker compose ${{ env.DOCKER_COMPOSE_ARGS }} run sut
